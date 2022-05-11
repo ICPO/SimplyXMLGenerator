@@ -80,6 +80,7 @@ $xml->saveDocument();
 ```
 3) Присваивание атрибутов узлу `images`
 ```php
+$xml = new xml();
 $xml->createDocument();
 $xml->wrap('properties');
 
@@ -103,6 +104,7 @@ $xml->saveDocument();
 ```
 4) Присваивание атрибутов узлам `url`
 ```php
+$xml = new xml();
 $xml->createDocument();
 $xml->wrap('properties');
 
@@ -130,6 +132,7 @@ $xml->saveDocument();
 ```
 5) Присваивание атрибутов 1му и 3му узлу `url`
 ```php
+$xml = new xml();
 $xml->createDocument();
 $xml->wrap('properties');
 
@@ -160,6 +163,7 @@ $xml->saveDocument();
 ```
 6) Пример с множественными потомками для корневого узла `properties`
 ```php
+$xml = new xml();
 $xml->createDocument();
 $xml->wrap('properties');
 
