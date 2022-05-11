@@ -40,6 +40,7 @@ class xml
         if ($key) {
             $childNode = $this->xml->createElement($key);
             if (is_array($attributes)) {
+
                 $childNode = $this->addAttributes($attributes, $childNode);
             }
             $valueNode = $this->xml->createTextNode($value);
@@ -61,7 +62,6 @@ class xml
                 $attribute->value = $valA;
                 $node->appendChild($attribute);
             }
-
         }
         return $node;
     }
@@ -71,16 +71,18 @@ class xml
      * Если передается массив, то обязательно должен быть передан узел обертка $wrapperForAllChild
      *
      */
-    public function addNode($nodeRootName, $nodeValue, $wrapperForAllChild = false, $CDATA = false, $nodeRootAttributes = false, $wrapperAttribute = false, $valueAttribute = false)
+    public function addNode($nodeRootName, $nodeValues, $wrapperForAllChild = false, $CDATA = false, $nodeRootAttributes = false,  $valueAttribute = false)
     {
+        $this->xml_cache_index = 0;
         try {
             $node = $this->xml->createElement($nodeRootName);
 
             if (is_array($nodeRootAttributes))
-                $node = $this->addAttributes($nodeRootAttributes, $node);
+                $this->addAttributes($nodeRootAttributes,$node);
 
-            if (is_array($nodeValue)) {
-                foreach ($nodeValue as $k => $v) {
+
+            if (is_array($nodeValues)) {
+                foreach ($nodeValues as $k => $v) {
                     if (is_numeric($k)) {
                         if ($CDATA) {
                             $value = $this->xml->createCDATASection($v);
@@ -89,6 +91,7 @@ class xml
                         }
                         if ($wrapperForAllChild) {
                             $childNode = $this->xml->createElement($wrapperForAllChild);
+                            $childNode= $this->addAttributes($valueAttribute, $childNode);
                             $childNode->appendChild($value);
                             $node->appendChild($childNode);
                         } else {
@@ -102,8 +105,6 @@ class xml
                         }
                         if ($wrapperForAllChild) {
                             $childNode = $this->xml->createElement($wrapperForAllChild);
-                            if ($wrapperAttribute)
-                                $childNode = $this->addAttributes($wrapperAttribute, $childNode);
                             $childNode->appendChild($value);
                             $node->appendChild($childNode);
                         } else {
@@ -115,9 +116,9 @@ class xml
                 }
             } else {
                 if ($CDATA) {
-                    $value = $this->returnCDATA($nodeValue);
+                    $value = $this->returnCDATA($nodeValues);
                 } else {
-                    $value = $this->xml->createTextNode($nodeValue);
+                    $value = $this->xml->createTextNode($nodeValues);
                 }
 
                 if ($wrapperForAllChild) {
@@ -213,4 +214,3 @@ class xml
         return $doc->saveXML();
     }
 }
-
